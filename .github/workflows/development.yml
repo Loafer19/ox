@@ -1,0 +1,48 @@
+name: development
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  backend:
+    name: Runs Refactor, Static Analysis, Style Fixer and Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+
+      - name: Setup Laravel
+        run: |
+          php -r "copy('.env.example', '.env');"
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          php artisan key:generate
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Build Frontent
+        run: |
+          bun i
+          bun run build
+
+      - name: Refactor
+        run: composer rector
+
+      - name: Static Analysis
+        run: composer phpstan
+
+      - name: Style Fixer
+        run: ./vendor/bin/pint --test
+
+      - name: Tests
+        run: composer test
