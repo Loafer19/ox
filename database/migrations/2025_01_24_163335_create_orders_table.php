@@ -8,9 +8,12 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('client_id')->constrained();
+            $table->foreignId('status_id')->constrained();
+            $table->string('comment')->nullable();
+            $table->timestamp('date')->nullable();
             $table->string('external_id')->nullable()->unique();
             $table->timestamp('synced_at')->nullable();
             $table->timestamps();
@@ -19,6 +22,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('orders');
     }
 };

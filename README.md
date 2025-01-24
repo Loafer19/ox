@@ -4,16 +4,46 @@ Standart Laravel stuff
 
 fill `.env` file and run:
 
-```composer i```
+```bash
+composer i
+```
 
-```php artisan migrate```
+then
+
+```bash
+php artisan migrate --seed
+```
+
+### To work with backend
+
+Run tests:
+
+```bash
+composer test
+```
+
+or
+
+```bash
+php artisan test
+```
+
+To check Code Quality, Static Analysis, Style and run tests:
+
+```bash
+composer check
+```
 
 ### To work with frontend
 
 just install [Bun](https://bun.sh) and run:
 
-```bun i```
+```bash
+bun i
+```
 
 then
 
-```bun run dev```
+```bash
+bun run dev
+```
