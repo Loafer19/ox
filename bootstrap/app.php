@@ -1,16 +1,21 @@
 <?php
 
+use App\Jobs\ClientSyncJob;
+use App\Jobs\OrderSyncJob;
 use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Configuration\Exceptions;
-use Illuminate\Foundation\Configuration\Middleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
     )
-    ->withMiddleware(function (Middleware $middleware) {
-        //
+    ->withMiddleware()
+    ->withExceptions()
+    ->withSchedule(function ($schedule) {
+        $schedule
+            ->job(new ClientSyncJob)
+            ->hourlyAt(5);
+        $schedule
+            ->job(new OrderSyncJob)
+            ->hourlyAt(15);
     })
-    ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
+    ->create();

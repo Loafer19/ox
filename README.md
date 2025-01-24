@@ -47,3 +47,9 @@ then
 ```bash
 bun run dev
 ```
+
+## API Integration
+
+after creating/updating a client/order, a request is sent to the CRM system
+
+also, client/order data is synchronized with the CRM system once an hour
