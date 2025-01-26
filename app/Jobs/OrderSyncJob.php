@@ -2,10 +2,10 @@
 
 namespace App\Jobs;
 
+use App\Contracts\CRM;
 use App\Models\Client;
 use App\Models\Order;
 use App\Models\Status;
-use App\Services\KeyCRMService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -13,28 +13,29 @@ class OrderSyncJob implements ShouldQueue
 {
     use Queueable;
 
-    public function handle(): void
+    public function handle(CRM $crm): void
     {
         $page = 1;
         $last_page = 1;
         $status_id = Status::first()->id;
 
         while ($page <= $last_page) {
-            $response = (new KeyCRMService())->getOrders($page);
+            $response = $crm->getOrders($page);
 
             $raw = [];
-            foreach ($response['data'] as $order) {
+
+            foreach ($response['items'] as $orderDTO) {
                 $client = Client::firstOrCreate([
-                    'external_id' => $order['buyer']['id'],
+                    'external_id' => $orderDTO->clientDTO->external_id,
                 ], [
-                    'name' => $order['buyer']['full_name'],
+                    'name' => $orderDTO->clientDTO->name,
                 ]);
 
                 $raw[] = [
-                    'external_id' => $order['id'],
+                    'external_id' => $orderDTO->external_id,
                     'status_id' => $status_id,
                     'client_id' => $client->id,
-                    'comment' => $order['buyer_comment'],
+                    'comment' => $orderDTO->comment,
                     'synced_at' => now(),
                 ];
             }

@@ -2,13 +2,16 @@
 
 namespace App\Services;
 
+use App\Contracts\CRM;
+use App\DTO\ClientDTO;
+use App\DTO\OrderDTO;
 use App\Models\Client;
 use App\Models\Order;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class KeyCRMService
+class KeyCRMService implements CRM
 {
     private readonly PendingRequest $httpClient;
 
@@ -19,13 +22,14 @@ class KeyCRMService
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array{last_page: int, items: array<int, ClientDTO>}
      */
     public function getClients(int $page): array
     {
         $response = $this->httpClient->get('/buyer', [
             'limit' => 50,
             'page' => $page,
+            'include' => 'custom_fields',
         ]);
 
         if ($response->failed()) {
@@ -36,7 +40,20 @@ class KeyCRMService
             throw new \Exception('Failed to get clients');
         }
 
-        return $response->json();
+        $clients = [];
+
+        foreach ($response->json('data') as $client) {
+            $clients[] = new ClientDTO(
+                $client['id'],
+                $client['full_name'],
+                now()->toDateTimeString()
+            );
+        }
+
+        return [
+            'last_page' => $response->json('last_page'),
+            'items' => $clients,
+        ];
     }
 
     public function createClient(Client $client): void
@@ -88,7 +105,7 @@ class KeyCRMService
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array{last_page: int, items: array<int, OrderDTO>}
      */
     public function getOrders(int $page): array
     {
@@ -106,7 +123,25 @@ class KeyCRMService
             throw new \Exception('Failed to get orders');
         }
 
-        return $response->json();
+        $orders = [];
+
+        foreach ($response->json('data') as $order) {
+            $orders[] = new OrderDTO(
+                $order['id'],
+                new ClientDTO(
+                    $order['buyer']['id'],
+                    $order['buyer']['full_name'],
+                    now()->toDateTimeString()
+                ),
+                $order['buyer_comment'],
+                now()->toDateTimeString()
+            );
+        }
+
+        return [
+            'last_page' => $response->json('last_page'),
+            'items' => $orders,
+        ];
     }
 
     public function createOrder(Order $order): void

@@ -2,8 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Contracts\CRM;
+use App\Helpers\TransformToArray;
 use App\Models\Client;
-use App\Services\KeyCRMService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -11,22 +12,17 @@ class ClientSyncJob implements ShouldQueue
 {
     use Queueable;
 
-    public function handle(): void
+    public function handle(CRM $crm): void
     {
         $page = 1;
         $last_page = 1;
 
         while ($page <= $last_page) {
-            $response = (new KeyCRMService())->getClients($page);
+            // to avoid unnecessary requests/updates we can
+            // add filter to api request to get only recently created/updated clients
+            $response = $crm->getClients($page);
 
-            $raw = [];
-            foreach ($response['data'] as $client) {
-                $raw[] = [
-                    'external_id' => $client['id'],
-                    'name' => $client['full_name'],
-                    'synced_at' => now(),
-                ];
-            }
+            $raw = array_map(new TransformToArray(), $response['items']);
 
             Client::upsert($raw, ['external_id'], ['name', 'synced_at']);
 

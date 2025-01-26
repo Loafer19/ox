@@ -12,10 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions()
     ->withSchedule(function ($schedule) {
         $schedule
-            ->job(new ClientSyncJob)
+            ->job(new ClientSyncJob())
             ->hourlyAt(5);
         $schedule
-            ->job(new OrderSyncJob)
+            ->job(new OrderSyncJob())
             ->hourlyAt(15);
     })
     ->create();

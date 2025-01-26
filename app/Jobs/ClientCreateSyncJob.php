@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Contracts\CRM;
 use App\Models\Client;
-use App\Services\KeyCRMService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -14,9 +14,8 @@ class ClientCreateSyncJob implements ShouldQueue
     // we can inject the client id to avoid serialization
     public function __construct(public Client $client) {}
 
-    public function handle(): void
+    public function handle(CRM $crm): void
     {
-        (new KeyCRMService())
-            ->createClient($this->client);
+        $crm->createClient($this->client);
     }
 }

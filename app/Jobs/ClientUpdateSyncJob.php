@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Contracts\CRM;
 use App\Models\Client;
-use App\Services\KeyCRMService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -13,14 +13,12 @@ class ClientUpdateSyncJob implements ShouldQueue
 
     public function __construct(public Client $client) {}
 
-    public function handle(): void
+    public function handle(CRM $crm): void
     {
         if (is_null($this->client->external_id)) {
-            (new KeyCRMService())
-                ->createClient($this->client);
+            $crm->createClient($this->client);
         } else {
-            (new KeyCRMService())
-                ->updateClient($this->client);
+            $crm->updateClient($this->client);
         }
     }
 }
