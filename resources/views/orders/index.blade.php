@@ -59,7 +59,17 @@
                                 </th>
                                 <th class="p-4">
                                     <p class="block text-sm font-normal leading-none text-slate-500">
+                                        Date
+                                    </p>
+                                </th>
+                                <th class="p-4">
+                                    <p class="block text-sm font-normal leading-none text-slate-500">
                                         Synced At
+                                    </p>
+                                </th>
+                                <th class="p-4">
+                                    <p class="block text-sm font-normal leading-none text-slate-500">
+                                        Files
                                     </p>
                                 </th>
                                 <th class="p-4">
@@ -89,8 +99,21 @@
                                     </td>
                                     <td class="p-4">
                                         <p class="block text-sm text-slate-800">
+                                            {{ $order->date?->diffForHumans() }}
+                                        </p>
+                                    </td>
+                                    <td class="p-4">
+                                        <p class="block text-sm text-slate-800">
                                             {{ $order->synced_at?->format('d/m/Y H:i') }}
                                         </p>
+                                    </td>
+                                    <td class="p-4">
+                                        @foreach ($order->files ?? [] as $file)
+                                            <a href="{{ Storage::url($file) }}" target="_blank"
+                                                class="block text-sm text-blue-500 hover:text-blue-700">
+                                                {{ str(basename($file))->limit(10) }}
+                                            </a>
+                                        @endforeach
                                     </td>
                                     <td class="p-4">
                                         <a href="{{ route('orders.edit', $order) }}"

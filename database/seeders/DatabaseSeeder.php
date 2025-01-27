@@ -10,7 +10,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         Status::factory()
-            ->count(5)
+            ->count(3)
             ->create();
     }
 }

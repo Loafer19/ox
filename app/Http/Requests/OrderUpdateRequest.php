@@ -15,6 +15,7 @@ class OrderUpdateRequest extends FormRequest
             'client_id' => ['required', 'integer', 'exists:clients,id'],
             'status_id' => ['required', 'integer', 'exists:statuses,id'],
             'comment' => ['required', 'string', 'min:3', 'max:255'],
+            'date' => ['nullable', 'string', 'date'],
         ];
     }
 }

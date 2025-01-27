@@ -48,6 +48,18 @@ class OrderController extends Controller
 
         $data['status_id'] = Status::first()->id;
 
+        // can be moved to service
+        if ($request->hasFile('files')) {
+            $files = [];
+
+            // @phpstan-ignore-next-line
+            foreach ($request->file('files') as $file) {
+                $files[] = $file->store('files', 'public');
+            }
+
+            $data['files'] = $files;
+        }
+
         Order::create($data);
 
         return redirect()->route('orders.index')

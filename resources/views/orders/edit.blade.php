@@ -54,9 +54,19 @@
 
                     <div>
                         <x-input-label for="comment" :value="__('Comment')" />
+
                         <x-text-input id="comment" name="comment" type="text" class="mt-1 block w-full"
                             :value="old('comment', $order->comment)" required autofocus autocomplete="comment" />
+
                         <x-input-error class="mt-2" :messages="$errors->get('comment')" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="date" :value="__('Date')" />
+
+                        <x-input-date type="date" id="date" name="date" :value="old('date', $order->date?->format('Y-m-d'))" />
+
+                        <x-input-error class="mt-2" :messages="$errors->get('date')" />
                     </div>
 
                     <div class="flex items-center gap-4">

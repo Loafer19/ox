@@ -14,6 +14,7 @@ return new class extends Migration
             $table->foreignId('status_id')->constrained();
             $table->string('comment')->nullable();
             $table->timestamp('date')->nullable();
+            $table->json('files')->nullable();
             $table->string('external_id')->nullable()->unique();
             $table->timestamp('synced_at')->nullable();
             $table->timestamps();

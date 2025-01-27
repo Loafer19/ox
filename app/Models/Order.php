@@ -18,6 +18,7 @@ class Order extends Model
         'status_id',
         'comment',
         'date',
+        'files',
         'external_id',
         'synced_at',
     ];
@@ -52,6 +53,7 @@ class Order extends Model
     {
         return [
             'date' => 'datetime',
+            'files' => 'array',
             'synced_at' => 'datetime',
         ];
     }
