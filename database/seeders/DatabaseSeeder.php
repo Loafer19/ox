@@ -9,11 +9,8 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        Status::query()
-            ->insert([
-                ['name' => 'Pending'],
-                ['name' => 'Approved'],
-                ['name' => 'Rejected'],
-            ]);
+        Status::factory()
+            ->count(5)
+            ->create();
     }
 }

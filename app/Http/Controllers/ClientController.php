@@ -50,6 +50,11 @@ class ClientController extends Controller
 
     public function destroy(Client $client): RedirectResponse
     {
+        if ($client->orders()->exists()) {
+            return redirect()->route('clients.index')
+                ->with('error', __('Client has orders.'));
+        }
+
         $client->delete();
 
         return redirect()->route('clients.index')

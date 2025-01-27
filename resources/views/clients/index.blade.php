@@ -21,6 +21,13 @@
                     </span>
                 @endif
 
+                @if (session()->has('error'))
+                    <span x-data="{ error: true }" x-show="error" x-transition x-init="setTimeout(() => error = false, 2000)"
+                        class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest  mb-6">
+                        {{ session()->get('error') }}
+                    </span>
+                @endif
+
                 <div
                     class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
                     <table class="w-full text-left table-auto min-w-max">
