@@ -54,9 +54,10 @@
                             @foreach ($clients as $client)
                                 <tr class="border-t border-slate-200">
                                     <td class="p-4">
-                                        <p class="block text-sm text-slate-800">
+                                        <a class="block text-sm text-slate-800"
+                                            href="{{ route('clients.show', $client) }}">
                                             {{ $client->name }}
-                                        </p>
+                                        </a>
                                     </td>
                                     <td class="p-4">
                                         <p class="block text-sm text-slate-800">

@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\Order;
 use App\Models\Status;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -94,6 +95,8 @@ class OrderController extends Controller
     public function destroy(Order $order): RedirectResponse
     {
         $order->delete();
+
+        Storage::disk('public')->delete($order->files ?? []);
 
         return redirect()->route('orders.index')
             ->with('success', __('Order deleted successfully.'));

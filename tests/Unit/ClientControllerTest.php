@@ -38,6 +38,18 @@ it('can store client', function () {
     $this->assertDatabaseHas('clients', $client);
 });
 
+it('can show client page with orders', function () {
+    $client = Client::factory()
+        ->hasOrders(3)
+        ->create();
+
+    $response = $this->get(route('clients.show', $client));
+
+    $response->assertStatus(200)
+        ->assertViewIs('clients.show')
+        ->assertViewHas('client', $client);
+});
+
 it('can show edit page', function () {
     $client = Client::factory()->create();
 
