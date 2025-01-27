@@ -54,7 +54,7 @@
             @endif
 
             <div
-                class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
+                class="relative flex flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
                 <table class="w-full text-left table-auto min-w-max">
                     <thead>
                         <tr>
@@ -126,7 +126,8 @@
                                         class="block inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150">
                                         Edit
                                     </a>
-                                    <form method="post" action="{{ route('orders.destroy', $order) }}"
+                                    <form method="post"
+                                        action="{{ route('clients.orders.destroy', [$client, $order]) }}"
                                         class="inline-block mx-5">
                                         @csrf
                                         @method('DELETE')

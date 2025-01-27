@@ -52,4 +52,12 @@ bun run dev
 
 after creating/updating a client/order, a request is sent to the CRM system
 
-also, client/order data is synchronized with the CRM system once an hour
+also, client/order data is synchronized with the CRM system once an hour (cuz webhooks is not available)
+
+### KeyCRM
+
+add `API_TOKEN_KEY_CRM` to `.env` file
+
+Docs: [KeyCRM API](https://docs.keycrm.app)
+
+also can check [config](config/services.php) file for details

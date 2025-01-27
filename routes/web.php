@@ -16,7 +16,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('clients', ClientController::class);
-    Route::resource('clients.orders', ClientOrderController::class)->only('create');
+    Route::resource('clients.orders', ClientOrderController::class)->only('create', 'destroy');
     Route::resource('orders', OrderController::class)->except('show');
 });
 

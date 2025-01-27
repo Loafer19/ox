@@ -8,8 +8,8 @@ use App\Http\Requests\OrderUpdateRequest;
 use App\Models\Client;
 use App\Models\Order;
 use App\Models\Status;
+use App\Services\OrderService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -55,7 +55,7 @@ class OrderController extends Controller
 
             // @phpstan-ignore-next-line
             foreach ($request->file('files') as $file) {
-                $files[] = $file->store('files', 'public');
+                $files[] = $file->store('orders', 'public');
             }
 
             $data['files'] = $files;
@@ -94,9 +94,7 @@ class OrderController extends Controller
 
     public function destroy(Order $order): RedirectResponse
     {
-        $order->delete();
-
-        Storage::disk('public')->delete($order->files ?? []);
+        app(OrderService::class)->delete($order);
 
         return redirect()->route('orders.index')
             ->with('success', __('Order deleted successfully.'));
